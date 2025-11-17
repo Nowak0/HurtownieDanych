@@ -12,15 +12,15 @@ START_DATE_YEAR = date.today().year - NUMBER_OF_YEARS + 1
 
 def calculate_age(pesel):
     birth_year = pesel[0:2]
-    return int(date.today().year) - (int(birth_year) + 2000)
+    return int(date.today().year) - (int(birth_year) + 1900)
 
 
 def check_pid(pesel):
     if len(pesel) != 11:
         return False
-    if pesel[2] != "2" and pesel[2] != "3":
+    if int(pesel[2:4]) > 12 :
         return False
-    if int(pesel[0:2]) > 12:
+    if int(pesel[0:2]) < 90:
         return False
 
     return True
