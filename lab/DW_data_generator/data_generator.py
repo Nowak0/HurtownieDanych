@@ -67,10 +67,12 @@ def random_is_current():
     return 1
 
 
-def set_id_exam(id_exam_date, this_class, iterator):
+def set_id_exam(id_exam_date, this_class, iterator, grade, attendance):
     if this_class[0] != "4":
         return None
     if random_is_current() == 0:
+        return None
+    if grade == 1 or attendance < 50:
         return None
 
     return int(id_exam_date + iterator)
@@ -229,17 +231,17 @@ def generate_end_year(students, classes, len_subjects, id_school_year, id_exam_d
     end_year = []
 
     for i in range(len(students)):
+        this_class = random.choice([_ for _ in range(len(classes))])
         for j in range(len_subjects):
-            this_class = random.choice([_ for _ in range(len(classes))])
-            new_id_exam_date = set_id_exam(id_exam_date, classes[this_class]['Nazwa'], j)
             grade = random_grade()
             attendance = random_attendance()
+            new_id_exam_date = set_id_exam(id_exam_date, classes[this_class]['Nazwa'], j, grade, attendance)
             exam_result = set_exam_result(new_id_exam_date)
 
             end_year.append({
                 "ID_Ucznia": i+1,
+                "ID_Przedmiotu": j + 1,
                 "ID_Klasy": this_class+1,
-                "ID_Przedmiotu": j+1,
                 "ID_Roku_szkolnego": id_school_year,
                 "ID_Daty_matury": new_id_exam_date,
                 "ID_Junk": set_id_junk(junk, grade, attendance, exam_result, new_id_exam_date),
@@ -271,7 +273,7 @@ df1 = pd.DataFrame(students, columns=["ID_Ucznia","Pesel", "ImieNazwisko", "Wiek
 df2 = pd.DataFrame(classes, columns=["ID_Klasy", "Nazwa", "Wielkosc_klasy"])
 df3 = pd.DataFrame(subjects, columns=["ID_Przedmiotu", "Nazwa"])
 df4 = pd.DataFrame(junk, columns=["ID_Junk", "Ocena", "Frekwencja", "Czy_zdany_przedmiot", "Czy_zdana_matura"])
-df5 = pd.DataFrame(end_year, columns=["ID_Ucznia", "ID_Klasy","ID_Przedmiotu", "ID_Roku_szkolnego", "ID_Daty_matury",
+df5 = pd.DataFrame(end_year, columns=["ID_Ucznia", "ID_Przedmiotu","ID_Klasy", "ID_Roku_szkolnego", "ID_Daty_matury",
                                       "ID_Junk", "Ocena_z_przedmiotu", "Frekwencja", "Wynik_z_matury"])
 df6 = pd.DataFrame(date, columns=["ID_Daty", "Data", "Rok", "Miesiac", "Dzien"])
 
