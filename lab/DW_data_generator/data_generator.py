@@ -1,25 +1,29 @@
 from faker import Faker
 import pandas as pd
 import random
-import math
 from datetime import date, timedelta
 
 
 NUMBER_OF_SUBJECTS = 3
 NUMBER_OF_STUDENTS = 10
 NUMBER_OF_YEARS = 1
-START_DATE_YEAR = 2025 - NUMBER_OF_YEARS + 1
+START_DATE_YEAR = date.today().year - NUMBER_OF_YEARS + 1
 
 
 def calculate_age(pesel):
     birth_year = pesel[0:2]
+    return int(date.today().year) - (int(birth_year) + 2000)
 
-    if birth_year[0] == "0":
-        birth_year = 2025 - int(birth_year)
-    else:
-        birth_year = 2025 - (int(birth_year) + 1900)
 
-    return birth_year
+def check_pid(pesel):
+    if len(pesel) != 11:
+        return False
+    if pesel[2] != "2" and pesel[2] != "3":
+        return False
+    if int(pesel[0:2]) > 12:
+        return False
+
+    return True
 
 
 def random_grade():
@@ -69,14 +73,14 @@ def set_id_exam(id_exam_date, this_class, iterator):
     if random_is_current() == 0:
         return None
 
-    return id_exam_date + iterator
+    return int(id_exam_date + iterator)
 
 
 def set_exam_result(id_exam_date):
     if id_exam_date is None:
         return None
 
-    return random_attendance()
+    return int(random_attendance())
 
 
 def set_junk_attendance(attendance):
@@ -138,10 +142,13 @@ def generate_students(length, faker):
     students = []
     for i in range(length):
         full_name = faker.first_name() + " " + faker.last_name()
-        pesel = faker.pesel()
+        pesel = str(faker.pesel())
+        while not check_pid(pesel):
+            pesel = str(faker.pesel())
 
         students.append({
-            "Pesel": pesel,
+            "ID_Ucznia": None,
+            "Pesel": str(pesel),
             "ImieNazwisko": full_name,
             "Wiek": calculate_age(pesel),
             "IsCurrent": 1
@@ -156,6 +163,7 @@ def generate_classes():
     for i in number:
         for j in letter:
             classes.append({
+                "ID_Klasy": None,
                 "Nazwa": f'{i}{j}',
                 "Wielkosc_klasy": 0
             })
@@ -167,6 +175,7 @@ def generate_subjects():
     names = ["Jezyk polski", "Jezyk angielski", "Matematyka"]
     for name in names:
         subjects.append({
+            "ID_Przedmiotu": None,
             "Nazwa": name
         })
 
@@ -181,6 +190,7 @@ def generate_date():
 
     while current_date < end:
         all_dates.append({
+            "ID_Daty": None,
             "Data": current_date.isoformat(),
             "Rok": current_date.year,
             "Miesiac": current_date.month,
@@ -205,6 +215,7 @@ def generate_junk():
                         subject = 0
 
                     junk.append({
+                        "ID_Junk": None,
                         "Ocena": grade,
                         "Frekwencja": att,
                         "Czy_zdany_przedmiot": subject,
@@ -245,8 +256,7 @@ students = generate_students(NUMBER_OF_STUDENTS, faker)
 classes = generate_classes()
 subjects = generate_subjects()
 junk = generate_junk()
-school_year = generate_date()
-exam_date = generate_date()
+date = generate_date()
 end_year = generate_end_year(students, classes, len(subjects), 150, 100, junk)
 classes = calculate_class_size(end_year, classes)
 
@@ -254,24 +264,21 @@ print(students)
 print(classes)
 print(subjects)
 print(junk)
-print(school_year)
-print(exam_date)
+print(date)
 print(end_year)
 
-df1 = pd.DataFrame(students, columns=["Pesel", "ImieNazwisko", "Wiek", "IsCurrent"])
-df2 = pd.DataFrame(classes, columns=["Nazwa", "Wielkosc_klasy"])
-df3 = pd.DataFrame(subjects, columns=["Nazwa"])
-df4 = pd.DataFrame(junk, columns=["Ocena", "Frekwencja", "Czy_zdany_przedmiot", "Czy_zdana_matura"])
+df1 = pd.DataFrame(students, columns=["ID_Ucznia","Pesel", "ImieNazwisko", "Wiek", "IsCurrent"])
+df2 = pd.DataFrame(classes, columns=["ID_Klasy", "Nazwa", "Wielkosc_klasy"])
+df3 = pd.DataFrame(subjects, columns=["ID_Przedmiotu", "Nazwa"])
+df4 = pd.DataFrame(junk, columns=["ID_Junk", "Ocena", "Frekwencja", "Czy_zdany_przedmiot", "Czy_zdana_matura"])
 df5 = pd.DataFrame(end_year, columns=["ID_Ucznia", "ID_Klasy","ID_Przedmiotu", "ID_Roku_szkolnego", "ID_Daty_matury",
                                       "ID_Junk", "Ocena_z_przedmiotu", "Frekwencja", "Wynik_z_matury"])
-df6 = pd.DataFrame(school_year, columns=["Data", "Rok", "Miesiac", "Dzien"])
-df7 = pd.DataFrame(exam_date, columns=["Data", "Rok", "Miesiac", "Dzien"])
+df6 = pd.DataFrame(date, columns=["ID_Daty", "Data", "Rok", "Miesiac", "Dzien"])
 
-df1.to_csv("dane/Uczen.csv", index=False)
-df2.to_csv("dane/Klasa.csv", index=False)
-df3.to_csv("dane/Przedmiot.csv", index=False)
-df4.to_csv("dane/Junk.csv", index=False)
-df5.to_csv("dane/Koniec_roku.csv", index=False)
-df6.to_csv("dane/Data_rok_szkolny.csv", index=False)
-df7.to_csv("dane/Data_matury.csv", index=False)
+df1.to_csv("dane/Uczen.csv", index=False, float_format="%.0f", quoting=1)
+df2.to_csv("dane/Klasa.csv", index=False, float_format="%.0f")
+df3.to_csv("dane/Przedmiot.csv", index=False, float_format="%.0f")
+df4.to_csv("dane/Junk.csv", index=False, float_format="%.0f")
+df5.to_csv("dane/Koniec_roku.csv", index=False, float_format="%.0f")
+df6.to_csv("dane/Data.csv", index=False, float_format="%.0f")
 

@@ -1,11 +1,11 @@
-Pesel,ImieNazwisko,Wiek,IsCurrent
-97010438006,Gaja Ziętal,28,1
-10231986277,Ignacy Święs,115,1
-54011471683,Błażej Golus,71,1
-75031392062,Anastazja Ligas,50,1
-64082129062,Eliza Macheta,61,1
-42090412613,Blanka Muniak,83,1
-19070825686,Tobiasz Wawrzkiewicz,106,1
-06282795180,Bruno Owsianka,2019,1
-05241646929,Kajetan Uziębło,2020,1
-25212649582,Sebastian Cogiel,100,1
+"ID_Ucznia","Pesel","ImieNazwisko","Wiek","IsCurrent"
+"","04251711292","Jędrzej Jędrzejek","21","1"
+"","12302930835","Leonard Lorenz","13","1"
+"","08210592823","Alex Lepianka","17","1"
+"","11230979343","Artur Opioła","14","1"
+"","12302613435","Alan Jarka","13","1"
+"","06272421084","Ksawery Olszowa","19","1"
+"","10280467754","Oliwier Mosur","15","1"
+"","12230326616","Natasza Kusio","13","1"
+"","05212197063","Eryk Dudała","20","1"
+"","01231838817","Sonia Ćwierz","24","1"

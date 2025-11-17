@@ -2,10 +2,10 @@ use SzkolaHD;
 
 create table Uczen (
     ID_Ucznia int identity(1,1) primary key,
-    Pesel char(11) not null unique,
+    Pesel VARCHAR(11) not null unique,
     ImieNazwisko varchar(50) not null,
     Wiek int not null,
-    IsCurrent bit not null
+    IsCurrent int not null
 );
 
 create table Przedmiot (
@@ -30,9 +30,9 @@ create table Data (
 create table Junk (
     ID_Junk int identity(1,1) primary key,
     Ocena int not null,
-    Frekwencja varchar(5) not null,
-    Czy_zdany_przedmiot bit not null,
-    Czy_zdana_matura bit null
+    Frekwencja varchar(6) not null,
+    Czy_zdany_przedmiot int not null,
+    Czy_zdana_matura int null
 );
 
 create table Koniec_roku (
