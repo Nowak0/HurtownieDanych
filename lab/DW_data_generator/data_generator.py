@@ -149,7 +149,7 @@ def generate_students(length, faker):
             pesel = str(faker.pesel())
 
         students.append({
-            "ID_Ucznia": None,
+            "": None,
             "Pesel": str(pesel),
             "ImieNazwisko": full_name,
             "Wiek": calculate_age(pesel),
@@ -165,7 +165,7 @@ def generate_classes():
     for i in number:
         for j in letter:
             classes.append({
-                "ID_Klasy": None,
+                "": None,
                 "Nazwa": f'{i}{j}',
                 "Wielkosc_klasy": 0
             })
@@ -177,7 +177,7 @@ def generate_subjects():
     names = ["Jezyk polski", "Jezyk angielski", "Matematyka"]
     for name in names:
         subjects.append({
-            "ID_Przedmiotu": None,
+            "": None,
             "Nazwa": name
         })
 
@@ -192,7 +192,7 @@ def generate_date():
 
     while current_date < end:
         all_dates.append({
-            "ID_Daty": None,
+            "": None,
             "Data": current_date.isoformat(),
             "Rok": current_date.year,
             "Miesiac": current_date.month,
@@ -217,7 +217,7 @@ def generate_junk():
                         subject = 0
 
                     junk.append({
-                        "ID_Junk": None,
+                        "": None,
                         "Ocena": grade,
                         "Frekwencja": att,
                         "Czy_zdany_przedmiot": subject,
@@ -269,13 +269,13 @@ print(junk)
 print(date)
 print(end_year)
 
-df1 = pd.DataFrame(students, columns=["ID_Ucznia","Pesel", "ImieNazwisko", "Wiek", "IsCurrent"])
-df2 = pd.DataFrame(classes, columns=["ID_Klasy", "Nazwa", "Wielkosc_klasy"])
-df3 = pd.DataFrame(subjects, columns=["ID_Przedmiotu", "Nazwa"])
-df4 = pd.DataFrame(junk, columns=["ID_Junk", "Ocena", "Frekwencja", "Czy_zdany_przedmiot", "Czy_zdana_matura"])
+df1 = pd.DataFrame(students, columns=["","Pesel", "ImieNazwisko", "Wiek", "IsCurrent"])
+df2 = pd.DataFrame(classes, columns=["", "Nazwa", "Wielkosc_klasy"])
+df3 = pd.DataFrame(subjects, columns=["", "Nazwa"])
+df4 = pd.DataFrame(junk, columns=["", "Ocena", "Frekwencja", "Czy_zdany_przedmiot", "Czy_zdana_matura"])
 df5 = pd.DataFrame(end_year, columns=["ID_Ucznia", "ID_Przedmiotu","ID_Klasy", "ID_Roku_szkolnego", "ID_Daty_matury",
                                       "ID_Junk", "Ocena_z_przedmiotu", "Frekwencja", "Wynik_z_matury"])
-df6 = pd.DataFrame(date, columns=["ID_Daty", "Data", "Rok", "Miesiac", "Dzien"])
+df6 = pd.DataFrame(date, columns=["", "Data", "Rok", "Miesiac", "Dzien"])
 
 df1.to_csv("dane/Uczen.csv", index=False, float_format="%.0f", quoting=1)
 df2.to_csv("dane/Klasa.csv", index=False, float_format="%.0f")
