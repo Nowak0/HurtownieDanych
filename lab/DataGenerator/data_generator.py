@@ -39,7 +39,7 @@ def random_frequency():
 def filter_students(student_in_class, class_number):
     filtered_students = []
     for i in range(len(student_in_class)):
-        if int(student_in_class[i]["IDKlasy"][0]) == class_number:
+        if int(student_in_class[i]["Nazwa_klasy"][0]) == class_number:
             filtered_students.append(student_in_class[i])
 
     return filtered_students
@@ -61,7 +61,7 @@ def generate_classes(year):
     for i in number:
         for j in letter:
             classes.append({
-                "IDKlasy": f'{i}{j}',
+                "Nazwa_klasy": f'{i}{j}',
                 "Rok_szkolny": year
             })
     return classes
@@ -98,7 +98,7 @@ def generate_student_in_class(students, classes):
         student_in_class.append({
             "ID_Ucznia_w_klasie": i+1,
             "Pesel": students[i]['Pesel'],
-            "IDKlasy": this_class['IDKlasy'],
+            "Nazwa_klasy": this_class['Nazwa_klasy'],
             "Rok_szkolny": this_class['Rok_szkolny']
         })
     return student_in_class
@@ -114,7 +114,7 @@ def generate_results(student_in_class, subjects):
     for i in range(attended):
         for j in range(NUMBER_OF_SUBJECTS):
             results.append({
-                "Uczeń": exam_students[i]["Pesel"],
+                "Pesel": exam_students[i]["Pesel"],
                 "Przedmiot": subjects[j]['Nazwa'],
                 "Wynik": random_frequency()
             })
@@ -123,23 +123,23 @@ def generate_results(student_in_class, subjects):
 
 faker = Faker("pl_PL")
 students = generate_students(30, faker)
-classes = generate_classes("24/25")
+classes = generate_classes(2025)
 subjects = generate_subjects()
 end_year = generate_end_year(students)
 student_in_class = generate_student_in_class(students, classes)
 results = generate_results(student_in_class, subjects)
 
-# df1 = pd.DataFrame(students, columns=["Pesel", "Imię", "Nazwisko"])
-# df2 = pd.DataFrame(classes, columns=["IDKlasy", "Rok_szkolny"])
-# df3 = pd.DataFrame(subjects, columns=["IDPrzedmiotu", "Nazwa"])
-# df4 = pd.DataFrame(student_in_class, columns=["ID_Ucznia_w_klasie", "Pesel", "IDKlasy", "Rok_szkolny"])
-# df5 = pd.DataFrame(end_year, columns=["ID_Ucznia_w_klasie", "IDPrzedmiotu", "Ocena", "Frekwencja"])
-# df6 = pd.DataFrame(results, columns=["Uczeń", "Przedmiot", "Wynik"])
-#
-# df1.to_csv("dane/uczen.csv", index=False)
-# df2.to_csv("dane/klasa.csv", index=False)
-# df3.to_csv("dane/przedmiot.csv", index=False)
-# df4.to_csv("dane/uczen_w_klasie.csv", index=False)
-# df5.to_csv("dane/koniec_roku.csv", index=False)
-# df6.to_csv("dane/wyniki.csv", index=False)
+df1 = pd.DataFrame(students, columns=["Pesel", "Imię", "Nazwisko"])
+df2 = pd.DataFrame(classes, columns=["Nazwa_klasy", "Rok_szkolny"])
+df3 = pd.DataFrame(subjects, columns=["IDPrzedmiotu", "Nazwa"])
+df4 = pd.DataFrame(student_in_class, columns=["ID_Ucznia_w_klasie", "Pesel", "Nazwa_klasy", "Rok_szkolny"])
+df5 = pd.DataFrame(end_year, columns=["ID_Ucznia_w_klasie", "IDPrzedmiotu", "Ocena", "Frekwencja"])
+df6 = pd.DataFrame(results, columns=["Uczen", "Przedmiot", "Wynik"])
+
+df1.to_csv("dane/uczen.csv", index=False)
+df2.to_csv("dane/klasa.csv", index=False)
+df3.to_csv("dane/przedmiot.csv", index=False)
+df4.to_csv("dane/uczen_w_klasie.csv", index=False)
+df5.to_csv("dane/koniec_roku.csv", index=False)
+df6.to_csv("dane/wyniki.csv", index=False)
 

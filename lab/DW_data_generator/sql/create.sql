@@ -1,4 +1,5 @@
-use SzkolaHD;
+use Szkoła
+go
 
 create table Uczen (
     ID_Ucznia int identity(1,1) primary key,

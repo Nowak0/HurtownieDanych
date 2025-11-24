@@ -1,0 +1,212 @@
+﻿<DataSourceView xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="bfd6a643-48c0-42e5-941d-8376b7d94a6b" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Szkola HD</ID>
+  <Name>Szkola HD</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:CurrentLayout</Name>
+      <Value>_ALL_TABLES_</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:SchemaRestriction</Name>
+      <Value></Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:RetrieveRelationships</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:Layouts</Name>
+      <Value>
+        <Layouts xmlns="">
+          <Diagram>
+            <Name>_ALL_TABLES_</Name>
+            <DiagramLayout />
+            <ShowRelationshipNames>False</ShowRelationshipNames>
+            <UseDiagramDefaultLayout>True</UseDiagramDefaultLayout>
+            <DiagramViewPortLeft>0</DiagramViewPortLeft>
+            <DiagramViewPortTop>0</DiagramViewPortTop>
+            <DiagramBoundingLeft>0</DiagramBoundingLeft>
+            <DiagramBoundingTop>0</DiagramBoundingTop>
+            <DiagramZoom>100</DiagramZoom>
+          </Diagram>
+        </Layouts>
+      </Value>
+    </Annotation>
+  </Annotations>
+  <DataSourceID>Szkola HD</DataSourceID>
+  <Schema>
+    <xs:schema id="Szkola_x0020_HD" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+      <xs:element name="Szkola_x0020_HD" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:design-time-name="125ae42a-a797-4433-b575-8f51b629d0f0">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="dbo_Data" msprop:DbTableName="Data" msprop:FriendlyName="Data" msprop:TableType="Table" msprop:DbSchemaName="dbo" msprop:design-time-name="002e4cf4-ab54-423d-8118-ebf87361516e">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ID_Daty" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:FriendlyName="ID_Daty" msprop:DbColumnName="ID_Daty" msprop:design-time-name="c14a523a-e30f-4733-9252-3af1cf0a3b66" type="xs:int" />
+                  <xs:element name="Data" msprop:FriendlyName="Data" msprop:DbColumnName="Data" msprop:design-time-name="ba368a19-b94a-4267-ab2b-92c0fdc48009">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="10" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="Rok" msprop:FriendlyName="Rok" msprop:DbColumnName="Rok" msprop:design-time-name="6eea4b99-3912-45f4-a917-6b080f4c5abe" type="xs:int" />
+                  <xs:element name="Miesiac" msprop:FriendlyName="Miesiac" msprop:DbColumnName="Miesiac" msprop:design-time-name="9b542553-a095-4e44-ac7c-74be86657b06" type="xs:int" />
+                  <xs:element name="Dzien" msprop:FriendlyName="Dzien" msprop:DbColumnName="Dzien" msprop:design-time-name="06339407-50b3-4f33-a25d-93e3afbe0235" type="xs:int" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Junk" msprop:DbTableName="Junk" msprop:FriendlyName="Junk" msprop:TableType="Table" msprop:DbSchemaName="dbo" msprop:design-time-name="20e840df-33f1-4d89-9007-5540a7c5faef">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ID_Junk" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:FriendlyName="ID_Junk" msprop:DbColumnName="ID_Junk" msprop:design-time-name="547c799d-e906-4cc3-940e-469b930b8d90" type="xs:int" />
+                  <xs:element name="Ocena" msprop:FriendlyName="Ocena" msprop:DbColumnName="Ocena" msprop:design-time-name="ad5473e4-d05f-44f1-81aa-43d6e2445ba8" type="xs:int" />
+                  <xs:element name="Frekwencja" msprop:FriendlyName="Frekwencja" msprop:DbColumnName="Frekwencja" msprop:design-time-name="92e3b92a-b507-4850-9685-e07d34ec7def">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="6" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="Czy_zdany_przedmiot" msprop:FriendlyName="Czy_zdany_przedmiot" msprop:DbColumnName="Czy_zdany_przedmiot" msprop:design-time-name="ef791bb6-6aa6-4c4a-bdc4-c60bd334376f" type="xs:int" />
+                  <xs:element name="Czy_zdana_matura" msprop:FriendlyName="Czy_zdana_matura" msprop:DbColumnName="Czy_zdana_matura" msprop:design-time-name="e03e5eff-99cd-45ec-93f1-bea62430915a" type="xs:int" minOccurs="0" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Klasa" msprop:DbTableName="Klasa" msprop:FriendlyName="Klasa" msprop:TableType="Table" msprop:DbSchemaName="dbo" msprop:design-time-name="58598e13-94be-4742-ad07-f66351cc0669">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ID_Klasy" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:FriendlyName="ID_Klasy" msprop:DbColumnName="ID_Klasy" msprop:design-time-name="102fc677-b05a-4230-a8de-298e4a76dbcc" type="xs:int" />
+                  <xs:element name="Nazwa" msprop:FriendlyName="Nazwa" msprop:DbColumnName="Nazwa" msprop:design-time-name="3ab1fdcb-0b32-4818-a7bc-3d11ee3b44fa">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="2" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="Wielkosc_klasy" msprop:FriendlyName="Wielkosc_klasy" msprop:DbColumnName="Wielkosc_klasy" msprop:design-time-name="0704c06f-b01b-4454-aab6-111f2236957a">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="7" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Koniec_roku" msprop:DbTableName="Koniec_roku" msprop:FriendlyName="Koniec_roku" msprop:TableType="Table" msprop:DbSchemaName="dbo" msprop:design-time-name="ed6c4d9c-1fd8-4dae-a47f-d1535048c4f5">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ID_Ucznia" msprop:FriendlyName="ID_Ucznia" msprop:DbColumnName="ID_Ucznia" msprop:design-time-name="8b6b3fac-2b8f-4a64-9768-db3ea18a49d4" type="xs:int" />
+                  <xs:element name="ID_Przedmiotu" msprop:FriendlyName="ID_Przedmiotu" msprop:DbColumnName="ID_Przedmiotu" msprop:design-time-name="d443282a-8857-4fed-b90f-839dd492ed9b" type="xs:int" />
+                  <xs:element name="ID_Klasy" msprop:FriendlyName="ID_Klasy" msprop:DbColumnName="ID_Klasy" msprop:design-time-name="fe9ee1cb-e22d-4682-bcf7-06cceba12057" type="xs:int" />
+                  <xs:element name="ID_Roku_szkolnego" msprop:FriendlyName="ID_Roku_szkolnego" msprop:DbColumnName="ID_Roku_szkolnego" msprop:design-time-name="51e137d0-7c8f-428a-aad6-359152574ca1" type="xs:int" />
+                  <xs:element name="ID_Daty_matury" msprop:FriendlyName="ID_Daty_matury" msprop:DbColumnName="ID_Daty_matury" msprop:design-time-name="d0a905fa-fa90-40fd-8408-499536464ca2" type="xs:int" minOccurs="0" />
+                  <xs:element name="ID_Junk" msprop:FriendlyName="ID_Junk" msprop:DbColumnName="ID_Junk" msprop:design-time-name="940ed38e-5388-46da-8e15-8f1e78663c8f" type="xs:int" />
+                  <xs:element name="Ocena_z_przedmiotu" msprop:FriendlyName="Ocena_z_przedmiotu" msprop:DbColumnName="Ocena_z_przedmiotu" msprop:design-time-name="d5014716-514a-4a92-aa16-c5238e5470e6" type="xs:int" />
+                  <xs:element name="Frekwencja" msprop:FriendlyName="Frekwencja" msprop:DbColumnName="Frekwencja" msprop:design-time-name="3bc46512-95b0-4230-b01f-324f1677b053" type="xs:int" />
+                  <xs:element name="Wynik_z_matury" msprop:FriendlyName="Wynik_z_matury" msprop:DbColumnName="Wynik_z_matury" msprop:design-time-name="8fd31185-4977-450d-b0fc-83ff0e108daa" type="xs:int" minOccurs="0" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Przedmiot" msprop:DbTableName="Przedmiot" msprop:FriendlyName="Przedmiot" msprop:TableType="Table" msprop:DbSchemaName="dbo" msprop:design-time-name="0fc0e6fa-7d19-4271-91be-f6363a32f668">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ID_Przedmiotu" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:FriendlyName="ID_Przedmiotu" msprop:DbColumnName="ID_Przedmiotu" msprop:design-time-name="3153c932-13cc-4a84-9ba1-227ed0a4be06" type="xs:int" />
+                  <xs:element name="Nazwa" msprop:FriendlyName="Nazwa" msprop:DbColumnName="Nazwa" msprop:design-time-name="cf25ca8e-cde8-42aa-aff1-d80bdc3e5d1f">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="50" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Uczen" msprop:DbTableName="Uczen" msprop:FriendlyName="Uczen" msprop:TableType="Table" msprop:DbSchemaName="dbo" msprop:design-time-name="c0044c6c-ddbd-4dd0-be46-a4151759b7b7">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ID_Ucznia" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:FriendlyName="ID_Ucznia" msprop:DbColumnName="ID_Ucznia" msprop:design-time-name="f7515aed-7efc-4d28-9ff9-be98fb022427" type="xs:int" />
+                  <xs:element name="Pesel" msprop:FriendlyName="Pesel" msprop:DbColumnName="Pesel" msprop:design-time-name="6e00c46a-baa1-4264-a06b-da2a904f1c15">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="11" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="ImieNazwisko" msprop:FriendlyName="ImieNazwisko" msprop:DbColumnName="ImieNazwisko" msprop:design-time-name="6219c153-744c-46ac-82cb-6c3d0e4d23ce">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="50" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="Wiek" msprop:FriendlyName="Wiek" msprop:DbColumnName="Wiek" msprop:design-time-name="f137a1fe-cea6-4cea-ad2c-277a5574dc31" type="xs:int" />
+                  <xs:element name="IsCurrent" msprop:FriendlyName="IsCurrent" msprop:DbColumnName="IsCurrent" msprop:design-time-name="2bcc2374-71a8-4d2b-a171-e095ed2de7a0" type="xs:int" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+        <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Data" />
+          <xs:field xpath="ID_Daty" />
+        </xs:unique>
+        <xs:unique name="dbo_Junk_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Junk" />
+          <xs:field xpath="ID_Junk" />
+        </xs:unique>
+        <xs:unique name="dbo_Klasa_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Klasa" />
+          <xs:field xpath="ID_Klasy" />
+        </xs:unique>
+        <xs:unique name="dbo_Koniec_roku_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Koniec_roku" />
+          <xs:field xpath="ID_Ucznia" />
+          <xs:field xpath="ID_Przedmiotu" />
+          <xs:field xpath="ID_Klasy" />
+          <xs:field xpath="ID_Roku_szkolnego" />
+        </xs:unique>
+        <xs:unique name="dbo_Przedmiot_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Przedmiot" />
+          <xs:field xpath="ID_Przedmiotu" />
+        </xs:unique>
+        <xs:unique name="dbo_Uczen_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Uczen" />
+          <xs:field xpath="ID_Ucznia" />
+        </xs:unique>
+        <xs:keyref name="FK_Koniec_roku_uczen" refer="dbo_Uczen_Constraint1">
+          <xs:selector xpath=".//dbo_Koniec_roku" />
+          <xs:field xpath="ID_Ucznia" />
+        </xs:keyref>
+        <xs:keyref name="FK_Koniec_roku_przedmiot" refer="dbo_Przedmiot_Constraint1">
+          <xs:selector xpath=".//dbo_Koniec_roku" />
+          <xs:field xpath="ID_Przedmiotu" />
+        </xs:keyref>
+        <xs:keyref name="FK_Koniec_roku_rok_szkolny" refer="Constraint1">
+          <xs:selector xpath=".//dbo_Koniec_roku" />
+          <xs:field xpath="ID_Roku_szkolnego" />
+        </xs:keyref>
+        <xs:keyref name="FK_Koniec_roku_klasa" refer="dbo_Klasa_Constraint1">
+          <xs:selector xpath=".//dbo_Koniec_roku" />
+          <xs:field xpath="ID_Klasy" />
+        </xs:keyref>
+        <xs:keyref name="FK_Koniec_roku_data_matury" refer="Constraint1">
+          <xs:selector xpath=".//dbo_Koniec_roku" />
+          <xs:field xpath="ID_Daty_matury" />
+        </xs:keyref>
+        <xs:keyref name="FK_Koniec_roku_junk" refer="dbo_Junk_Constraint1">
+          <xs:selector xpath=".//dbo_Koniec_roku" />
+          <xs:field xpath="ID_Junk" />
+        </xs:keyref>
+      </xs:element>
+    </xs:schema>
+    <Szkola_x0020_HD xmlns="" />
+  </Schema>
+</DataSourceView>
