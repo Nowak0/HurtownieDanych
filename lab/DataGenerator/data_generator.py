@@ -4,6 +4,9 @@ import random
 import math
 
 NUMBER_OF_SUBJECTS = 3
+NUMBER_OF_STUDENTS = 30
+START_DATE_SCHOOL = "2024-09-01"
+START_DATE_EXAM = "2025-05-01"
 
 def random_grade():
     grades = [1,2,3,4,5,6]
@@ -44,12 +47,26 @@ def filter_students(student_in_class, class_number):
 
     return filtered_students
 
+def check_pid(pesel):
+    if len(pesel) != 11:
+        return False
+    if int(pesel[2:4]) > 12:
+        return False
+    if int(pesel[0:2]) < 90:
+        return False
+
+    return True
+
 def generate_students(length, faker):
     students = []
     for i in range(length):
+        pesel = str(faker.pesel())
+        while not check_pid(pesel):
+            pesel = str(faker.pesel())
+
         students.append({
-            "Pesel": faker.pesel(),
-            "Imię": faker.first_name(),
+            "Pesel": pesel,
+            "Imie": faker.first_name(),
             "Nazwisko": faker.last_name(),
         })
     return students
@@ -98,12 +115,11 @@ def generate_student_in_class(students, classes):
         student_in_class.append({
             "ID_Ucznia_w_klasie": i+1,
             "Pesel": students[i]['Pesel'],
-            "Nazwa_klasy": this_class['Nazwa_klasy'],
-            "Rok_szkolny": this_class['Rok_szkolny']
+            "Nazwa_klasy": this_class['Nazwa_klasy']
         })
     return student_in_class
 
-def generate_results(student_in_class, subjects):
+def generate_results(student_in_class, subjects, exam_date):
     results = []
     exam_students = filter_students(student_in_class, 4)
     len_exam_students = len(exam_students)
@@ -113,32 +129,36 @@ def generate_results(student_in_class, subjects):
 
     for i in range(attended):
         for j in range(NUMBER_OF_SUBJECTS):
+            s = exam_date.split("-")
+            new_date = s[0] + "-" + s[1] + "-" + str(int(s[2])+j)
+
             results.append({
                 "Pesel": exam_students[i]["Pesel"],
                 "Przedmiot": subjects[j]['Nazwa'],
-                "Wynik": random_frequency()
+                "Wynik": random_frequency(),
+                "Data_matury": new_date
             })
 
     return results
 
 faker = Faker("pl_PL")
-students = generate_students(30, faker)
-classes = generate_classes(2025)
+students = generate_students(NUMBER_OF_STUDENTS, faker)
+classes = generate_classes(START_DATE_SCHOOL)
 subjects = generate_subjects()
 end_year = generate_end_year(students)
 student_in_class = generate_student_in_class(students, classes)
-results = generate_results(student_in_class, subjects)
+results = generate_results(student_in_class, subjects, START_DATE_EXAM)
 
-df1 = pd.DataFrame(students, columns=["Pesel", "Imię", "Nazwisko"])
+df1 = pd.DataFrame(students, columns=["Pesel", "Imie", "Nazwisko"])
 df2 = pd.DataFrame(classes, columns=["Nazwa_klasy", "Rok_szkolny"])
 df3 = pd.DataFrame(subjects, columns=["IDPrzedmiotu", "Nazwa"])
-df4 = pd.DataFrame(student_in_class, columns=["ID_Ucznia_w_klasie", "Pesel", "Nazwa_klasy", "Rok_szkolny"])
+df4 = pd.DataFrame(student_in_class, columns=["ID_Ucznia_w_klasie", "Pesel", "Nazwa_klasy"])
 df5 = pd.DataFrame(end_year, columns=["ID_Ucznia_w_klasie", "IDPrzedmiotu", "Ocena", "Frekwencja"])
-df6 = pd.DataFrame(results, columns=["Uczen", "Przedmiot", "Wynik"])
+df6 = pd.DataFrame(results, columns=["Pesel", "Przedmiot", "Wynik", "Data_matury"])
 
-df1.to_csv("dane/uczen.csv", index=False)
-df2.to_csv("dane/klasa.csv", index=False)
-df3.to_csv("dane/przedmiot.csv", index=False)
+df1.to_csv("dane/uczniowie.csv", index=False)
+df2.to_csv("dane/klasy.csv", index=False)
+df3.to_csv("dane/przedmioty.csv", index=False)
 df4.to_csv("dane/uczen_w_klasie.csv", index=False)
 df5.to_csv("dane/koniec_roku.csv", index=False)
 df6.to_csv("dane/wyniki.csv", index=False)

@@ -1,44 +1,83 @@
 USE Szkoła;
 GO
 
+
 IF OBJECT_ID('DimUczen','U') IS NOT NULL DROP TABLE DimUczen;
+GO
+
 CREATE TABLE DimUczen (
-    ID_Ucznia int IDENTITY(1,1) PRIMARY KEY,
-    Pesel char(11) NOT NULL,
-    ImieNazwisko varchar(50) NOT NULL,
-    DataUrodzenia date NULL,
-    Wiek int NULL,
-    IsCurrent bit NOT NULL DEFAULT 1
+    ID_Ucznia       INT IDENTITY(1,1) PRIMARY KEY,
+    Pesel           CHAR(11) NOT NULL,
+    ImieNazwisko    VARCHAR(50) NOT NULL,
+    DataUrodzenia   DATE NULL,
+    Wiek            INT NULL,
+
+    StartDate       DATETIME NOT NULL DEFAULT (GETDATE()),
+    EndDate         DATETIME NULL,
+    IsCurrent       BIT NOT NULL DEFAULT 1
 );
 
-CREATE INDEX IX_DimUczen_Pesel_IsCurrent ON DimUczen(Pesel, IsCurrent);
+CREATE INDEX IX_DimUczen_Pesel_IsCurrent 
+    ON DimUczen(Pesel, IsCurrent);
+GO
 
-DECLARE @EntryDate datetime = GETDATE();
 
 IF OBJECT_ID('vETLDimUczenData','V') IS NOT NULL DROP VIEW vETLDimUczenData;
 GO
+
 CREATE VIEW vETLDimUczenData AS
 SELECT
     Pesel,
-    ImieNazwisko = CAST(Imie + ' ' + Nazwisko AS varchar(50)),
+    ImieNazwisko = CAST(Imie + ' ' + Nazwisko AS VARCHAR(50)),
     DataUrodzenia = dbo.fn_peel_to_date(Pesel),
-    Wiek = CASE WHEN dbo.fn_peel_to_date(Pesel) IS NOT NULL
-               THEN DATEDIFF(year, dbo.fn_peel_to_date(Pesel), @EntryDate)
-               ELSE NULL END,
-    1 AS IsCurrent
+    Wiek = CASE 
+            WHEN dbo.fn_peel_to_date(Pesel) IS NOT NULL THEN 
+                DATEDIFF(YEAR, dbo.fn_peel_to_date(Pesel), GETDATE())
+           ELSE NULL END
 FROM stg_uczen;
 GO
 
-MERGE DimUczen AS target
-USING vETLDimUczenData AS source
-ON target.Pesel = source.Pesel AND target.IsCurrent = 1
-WHEN MATCHED AND (
-        target.ImieNazwisko <> source.ImieNazwisko OR
-        target.DataUrodzenia <> source.DataUrodzenia OR
-        target.Wiek <> source.Wiek
-    )
-    THEN UPDATE SET target.IsCurrent = 0
-WHEN NOT MATCHED BY TARGET
-    THEN INSERT (Pesel, ImieNazwisko, DataUrodzenia, Wiek, IsCurrent)
-         VALUES (source.Pesel, source.ImieNazwisko, source.DataUrodzenia, source.Wiek, 1);
+UPDATE d
+SET 
+    d.IsCurrent = 0,
+    d.EndDate = GETDATE()
+FROM DimUczen d
+JOIN vETLDimUczenData s 
+    ON d.Pesel = s.Pesel
+WHERE d.IsCurrent = 1
+  AND (
+        d.ImieNazwisko   <> s.ImieNazwisko OR
+        d.DataUrodzenia  <> s.DataUrodzenia OR
+        d.Wiek           <> s.Wiek
+      );
+GO
+
+INSERT INTO DimUczen (Pesel, ImieNazwisko, DataUrodzenia, Wiek, StartDate, EndDate, IsCurrent)
+SELECT 
+    s.Pesel, 
+    s.ImieNazwisko, 
+    s.DataUrodzenia, 
+    s.Wiek,
+    GETDATE(), 
+    NULL,
+    1
+FROM vETLDimUczenData s
+JOIN DimUczen d
+    ON d.Pesel = s.Pesel
+   AND d.IsCurrent = 0
+   AND d.EndDate = (SELECT MAX(EndDate) FROM DimUczen WHERE Pesel = d.Pesel);
+GO
+
+INSERT INTO DimUczen (Pesel, ImieNazwisko, DataUrodzenia, Wiek, StartDate, EndDate, IsCurrent)
+SELECT
+    s.Pesel,
+    s.ImieNazwisko,
+    s.DataUrodzenia,
+    s.Wiek,
+    GETDATE(),
+    NULL,
+    1
+FROM vETLDimUczenData s
+LEFT JOIN DimUczen d ON d.Pesel = s.Pesel
+WHERE d.Pesel IS NULL;
 GO

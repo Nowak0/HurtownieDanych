@@ -3,24 +3,28 @@ GO
 
 IF OBJECT_ID('FactKoniecRoku','U') IS NOT NULL DROP TABLE FactKoniecRoku;
 CREATE TABLE FactKoniecRoku (
-    FactID bigint IDENTITY(1,1) PRIMARY KEY,
     ID_Ucznia int NOT NULL,
     ID_Klasy int NOT NULL,
     ID_Przedmiotu int NOT NULL,
     ID_Roku_szkolnego int NOT NULL,
     ID_Daty_matury int NULL,
-    ID_Junk int NULL,
+    ID_Junk int NOT NULL,
     Ocena_z_przedmiotu int NULL,
-    Frekwencja decimal(5,2) NULL,
-    Wynik_z_matury decimal(9,2) NULL,
-    LoadDate datetime NOT NULL DEFAULT GETDATE()
+    Frekwencja int NULL,
+    Wynik_z_matury int NULL,
+    CONSTRAINT PK_FactKoniecRoku PRIMARY KEY (
+        ID_Ucznia,
+        ID_Klasy,
+        ID_Przedmiotu,
+        ID_Roku_szkolnego,
+        ID_Junk
+    )
 );
 
-CREATE INDEX IX_FactKoniecRoku_Uczen ON FactKoniecRoku(ID_Ucznia);
-CREATE INDEX IX_FactKoniecRoku_Klasa ON FactKoniecRoku(ID_Klasy);
-CREATE INDEX IX_FactKoniecRoku_Przedmiot ON FactKoniecRoku(ID_Przedmiotu);
-CREATE INDEX IX_FactKoniecRoku_RokSzkolny ON FactKoniecRoku(ID_Roku_szkolnego);
-CREATE INDEX IX_FactKoniecRoku_DatyMatury ON FactKoniecRoku(ID_Daty_matury);
+CREATE INDEX IX_Fact_Uczen ON FactKoniecRoku(ID_Ucznia);
+CREATE INDEX IX_Fact_Klasa ON FactKoniecRoku(ID_Klasy);
+CREATE INDEX IX_Fact_Przedmiot ON FactKoniecRoku(ID_Przedmiotu);
+CREATE INDEX IX_Fact_Rok ON FactKoniecRoku(ID_Roku_szkolnego);
 
 INSERT INTO FactKoniecRoku (
     ID_Ucznia,
@@ -44,12 +48,48 @@ SELECT
     kr.Frekwencja,
     w.Wynik
 FROM stg_koniec_roku kr
-JOIN stg_uczen_w_klasie uw ON kr.ID_Ucznia_w_klasie = uw.ID_Ucznia_w_klasie
-JOIN DimDate dd ON dd.DataDate = CAST(LEFT(uw.Rok_szkolny,4) + '-09-01' AS date)
-JOIN DimUczen du ON uw.Pesel = du.Pesel AND du.IsCurrent = 1
-JOIN DimKlasa dk ON uw.Nazwa_klasy = dk.Nazwa AND uw.Rok_szkolny = dk.Rok_szkolny
-JOIN DimPrzedmiot dp ON kr.IDPrzedmiotu = dp.SourceSubjectID
-JOIN DimJunk dj ON kr.Ocena = dj.Ocena AND kr.Frekwencja = dj.Frekwencja
-LEFT JOIN stg_wyniki w ON uw.Pesel = w.Uczen_Pesel AND dp.SourceSubjectID = w.Przedmiot_zew
-LEFT JOIN DimDate ddm ON w.DataMatury IS NOT NULL AND ddm.DataDate = w.DataMatury;
-GO
+JOIN stg_uczen_w_klasie uw 
+    ON kr.ID_Ucznia_w_klasie = uw.ID_Ucznia_w_klasie
+
+JOIN DimUczen du 
+    ON uw.Pesel = du.Pesel AND du.IsCurrent = 1
+
+JOIN DimKlasa dk 
+    ON uw.Nazwa_klasy = dk.Nazwa 
+
+JOIN stg_klasa k
+    ON uw.Nazwa_klasy = k.Nazwa_klasy
+
+JOIN DimDate dd
+    ON dd.DataDate = CAST(k.Rok_szkolny as date)
+
+JOIN DimPrzedmiot dp 
+    ON kr.ID_Przedmiotu = dp.SourceSubjectID
+
+LEFT JOIN stg_wyniki w 
+    ON uw.Pesel = w.Pesel 
+    AND dp.Nazwa = w.Przedmiot
+
+LEFT JOIN DimDate ddm 
+    ON ddm.DataDate = w.Data_matury
+
+LEFT JOIN DimJunk dj 
+    ON dj.Ocena = kr.Ocena
+    AND dj.Frekwencja =
+        CASE 
+            WHEN kr.Frekwencja BETWEEN 0 AND 49 THEN '0-49'
+            WHEN kr.Frekwencja BETWEEN 50 AND 69 THEN '50-69'
+            WHEN kr.Frekwencja BETWEEN 70 AND 89 THEN '70-89'
+            WHEN kr.Frekwencja BETWEEN 90 AND 100 THEN '90-100'
+        END
+    AND dj.Czy_zdany_przedmiot =
+        CASE 
+            WHEN kr.Ocena > 1 AND kr.Frekwencja >= 50 THEN 1
+            ELSE 0
+        END
+    AND (
+        (w.Wynik IS NULL AND dj.Czy_zdana_matura IS NULL)
+        OR
+        (w.Wynik IS NOT NULL AND dj.Czy_zdana_matura =
+            CASE WHEN w.Wynik > 30 THEN 1 ELSE 0 END)
+    );

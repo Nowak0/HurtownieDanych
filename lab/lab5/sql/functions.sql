@@ -1,4 +1,4 @@
-USE DW_school;
+USE Szkoła;
 GO
 
 IF OBJECT_ID('dbo.fn_peel_to_date') IS NOT NULL DROP FUNCTION dbo.fn_peel_to_date;

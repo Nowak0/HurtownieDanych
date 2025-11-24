@@ -18,7 +18,7 @@ def calculate_age(pesel):
 def check_pid(pesel):
     if len(pesel) != 11:
         return False
-    if int(pesel[2:4]) > 12 :
+    if int(pesel[2:4]) > 12:
         return False
     if int(pesel[0:2]) < 90:
         return False

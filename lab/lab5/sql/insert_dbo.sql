@@ -43,7 +43,7 @@ WITH (
 
 BULK INSERT stg_wyniki
 FROM 'C:\Users\piotr\OneDrive\Pulpit\Studia\SEMESTR 5\HURTOWNIE DANYCH\tabelkiv3\wyniki.csv'
-WITH (E
+WITH (
     FIRSTROW = 2, 
     FIELDTERMINATOR = ',',  
     ROWTERMINATOR = '0x0A'    
