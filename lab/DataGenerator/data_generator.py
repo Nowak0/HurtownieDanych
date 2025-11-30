@@ -170,7 +170,7 @@ def generate_results(student_in_class, subjects, exam_date):
     exam_students = filter_students(student_in_class, 4)
     len_exam_students = len(exam_students)
     attended = len_exam_students
-    if len_exam_students > 10:
+    if len_exam_students > 6:
         attended = int(len_exam_students - 0.1*len_exam_students)
 
     for i in range(attended):
