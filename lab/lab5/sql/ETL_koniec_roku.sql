@@ -1,30 +1,5 @@
-USE Szkoła;
+USE Szkola;
 GO
-
-IF OBJECT_ID('FactKoniecRoku','U') IS NOT NULL DROP TABLE FactKoniecRoku;
-CREATE TABLE FactKoniecRoku (
-    ID_Ucznia int NOT NULL,
-    ID_Klasy int NOT NULL,
-    ID_Przedmiotu int NOT NULL,
-    ID_Roku_szkolnego int NOT NULL,
-    ID_Daty_matury int NULL,
-    ID_Junk int NOT NULL,
-    Ocena_z_przedmiotu int NULL,
-    Frekwencja int NULL,
-    Wynik_z_matury int NULL,
-    CONSTRAINT PK_FactKoniecRoku PRIMARY KEY (
-        ID_Ucznia,
-        ID_Klasy,
-        ID_Przedmiotu,
-        ID_Roku_szkolnego,
-        ID_Junk
-    )
-);
-
-CREATE INDEX IX_Fact_Uczen ON FactKoniecRoku(ID_Ucznia);
-CREATE INDEX IX_Fact_Klasa ON FactKoniecRoku(ID_Klasy);
-CREATE INDEX IX_Fact_Przedmiot ON FactKoniecRoku(ID_Przedmiotu);
-CREATE INDEX IX_Fact_Rok ON FactKoniecRoku(ID_Roku_szkolnego);
 
 INSERT INTO FactKoniecRoku (
     ID_Ucznia,
@@ -48,14 +23,17 @@ SELECT
     kr.Frekwencja,
     w.Wynik
 FROM stg_koniec_roku kr
+
 JOIN stg_uczen_w_klasie uw 
     ON kr.ID_Ucznia_w_klasie = uw.ID_Ucznia_w_klasie
 
 JOIN DimUczen du 
-    ON uw.Pesel = du.Pesel AND du.IsCurrent = 1
+    ON uw.Pesel = du.Pesel 
+    AND du.IsCurrent = 1
 
 JOIN DimKlasa dk 
     ON uw.Nazwa_klasy = dk.Nazwa 
+    AND dk.EndDate IS NULL
 
 JOIN stg_klasa k
     ON uw.Nazwa_klasy = k.Nazwa_klasy
@@ -92,4 +70,19 @@ LEFT JOIN DimJunk dj
         OR
         (w.Wynik IS NOT NULL AND dj.Czy_zdana_matura =
             CASE WHEN w.Wynik > 30 THEN 1 ELSE 0 END)
-    );
+    )
+
+LEFT JOIN FactKoniecRoku f
+    ON f.ID_Ucznia          = du.ID_Ucznia
+   AND f.ID_Klasy           = dk.ID_Klasy
+   AND f.ID_Przedmiotu      = dp.ID_Przedmiotu
+   AND f.ID_Roku_szkolnego  = dd.ID_Daty
+   AND (
+        (ddm.ID_Daty IS NULL AND f.ID_Daty_matury IS NULL)
+        OR
+        (ddm.ID_Daty = f.ID_Daty_matury)
+       )
+   AND f.ID_Junk = dj.ID_Junk
+
+WHERE f.ID_Ucznia IS NULL;
+GO

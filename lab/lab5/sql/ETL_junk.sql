@@ -1,18 +1,5 @@
-USE Szkoła;
+USE Szkola;
 GO
-
-IF OBJECT_ID('DimJunk','U') IS NOT NULL DROP TABLE DimJunk;
-GO
-
-CREATE TABLE DimJunk (
-    ID_Junk int IDENTITY(1,1) PRIMARY KEY,
-    Ocena int NOT NULL,
-    Frekwencja varchar(10) NOT NULL,
-    Czy_zdany_przedmiot bit NOT NULL,
-    Czy_zdana_matura bit NULL
-);
-GO
-
 
 DECLARE @grades TABLE (grade int);
 INSERT INTO @grades (grade) VALUES (1),(2),(3),(4),(5),(6);

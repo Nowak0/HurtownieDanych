@@ -1,24 +1,4 @@
-USE Szkoła;
-GO
-
-
-IF OBJECT_ID('DimUczen','U') IS NOT NULL DROP TABLE DimUczen;
-GO
-
-CREATE TABLE DimUczen (
-    ID_Ucznia       INT IDENTITY(1,1) PRIMARY KEY,
-    Pesel           CHAR(11) NOT NULL,
-    ImieNazwisko    VARCHAR(50) NOT NULL,
-    DataUrodzenia   DATE NULL,
-    Wiek            INT NULL,
-
-    StartDate       DATETIME NOT NULL DEFAULT (GETDATE()),
-    EndDate         DATETIME NULL,
-    IsCurrent       BIT NOT NULL DEFAULT 1
-);
-
-CREATE INDEX IX_DimUczen_Pesel_IsCurrent 
-    ON DimUczen(Pesel, IsCurrent);
+USE Szkola;
 GO
 
 
@@ -29,7 +9,6 @@ CREATE VIEW vETLDimUczenData AS
 SELECT
     Pesel,
     ImieNazwisko = CAST(Imie + ' ' + Nazwisko AS VARCHAR(50)),
-    DataUrodzenia = dbo.fn_peel_to_date(Pesel),
     Wiek = CASE 
             WHEN dbo.fn_peel_to_date(Pesel) IS NOT NULL THEN 
                 DATEDIFF(YEAR, dbo.fn_peel_to_date(Pesel), GETDATE())
@@ -37,44 +16,38 @@ SELECT
 FROM stg_uczen;
 GO
 
+WITH SourceData AS (
+    SELECT
+        u.Pesel,
+        u.Imie + ' ' + u.Nazwisko AS ImieNazwisko,
+        DATEDIFF(YEAR, dbo.fn_peel_to_date(u.Pesel), GETDATE()) AS Wiek,
+        k.Rok_szkolny AS StartDate,
+        DATEFROMPARTS(YEAR(k.Rok_szkolny), 6, 30) AS EndDate
+    FROM stg_uczen u
+    JOIN stg_uczen_w_klasie uw ON u.Pesel = uw.Pesel
+    JOIN stg_klasa k ON uw.Nazwa_klasy = k.Nazwa_klasy
+)
+
 UPDATE d
 SET 
     d.IsCurrent = 0,
-    d.EndDate = GETDATE()
+    d.EndDate = s.EndDate
 FROM DimUczen d
 JOIN vETLDimUczenData s 
     ON d.Pesel = s.Pesel
 WHERE d.IsCurrent = 1
   AND (
         d.ImieNazwisko   <> s.ImieNazwisko OR
-        d.DataUrodzenia  <> s.DataUrodzenia OR
         d.Wiek           <> s.Wiek
       );
 GO
 
-INSERT INTO DimUczen (Pesel, ImieNazwisko, DataUrodzenia, Wiek, StartDate, EndDate, IsCurrent)
-SELECT 
-    s.Pesel, 
-    s.ImieNazwisko, 
-    s.DataUrodzenia, 
-    s.Wiek,
-    GETDATE(), 
-    NULL,
-    1
-FROM vETLDimUczenData s
-JOIN DimUczen d
-    ON d.Pesel = s.Pesel
-   AND d.IsCurrent = 0
-   AND d.EndDate = (SELECT MAX(EndDate) FROM DimUczen WHERE Pesel = d.Pesel);
-GO
-
-INSERT INTO DimUczen (Pesel, ImieNazwisko, DataUrodzenia, Wiek, StartDate, EndDate, IsCurrent)
+INSERT INTO DimUczen (Pesel, ImieNazwisko, Wiek, StartDate, EndDate, IsCurrent)
 SELECT
     s.Pesel,
     s.ImieNazwisko,
-    s.DataUrodzenia,
     s.Wiek,
-    GETDATE(),
+    s.StartDate,
     NULL,
     1
 FROM vETLDimUczenData s

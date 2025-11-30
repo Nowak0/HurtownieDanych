@@ -1,4 +1,4 @@
-USE Szkoła;
+USE Szkola;
 GO
 
 SET NOCOUNT ON;

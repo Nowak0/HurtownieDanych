@@ -1,4 +1,4 @@
-use Szkoła
+use Szkola
 GO
 
 BULK INSERT stg_uczen

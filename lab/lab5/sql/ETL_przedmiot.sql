@@ -1,13 +1,5 @@
-USE Szkoła;
+USE Szkola;
 GO
-
-IF OBJECT_ID('DimPrzedmiot','U') IS NOT NULL DROP TABLE DimPrzedmiot;
-CREATE TABLE DimPrzedmiot (
-    ID_Przedmiotu int IDENTITY(1,1) PRIMARY KEY,
-    SourceSubjectID int NULL,
-    Nazwa varchar(300) NOT NULL,
-    UNIQUE (SourceSubjectID, Nazwa)
-);
 
 MERGE DimPrzedmiot AS target
 USING (
