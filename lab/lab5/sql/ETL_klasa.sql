@@ -1,8 +1,11 @@
 USE Szkola;
 GO
 
-WITH SourceData AS (
-    SELECT 
+IF OBJECT_ID('vETLSourceKlasa','V') IS NOT NULL DROP VIEW vETLSourceKlasa;
+GO
+
+CREATE VIEW vETLSourceKlasa AS
+SELECT 
         k.Nazwa_klasy AS Nazwa_klasy,
         COUNT(u.Pesel) AS Liczba_uczniow,
         CASE 
@@ -18,29 +21,34 @@ WITH SourceData AS (
     JOIN stg_klasa k ON uw.Nazwa_klasy = k.Nazwa_klasy
     GROUP BY 
         k.Nazwa_klasy,
-        k.Rok_szkolny
-)
+        k.Rok_szkolny;
+GO 
+
+UPDATE d
+SET d.EndDate = DATEFROMPARTS(YEAR(d.StartDate)+1, 6, 30)
+FROM DimKlasa d
+LEFT JOIN vETLSourceKlasa s
+    ON d.Nazwa = s.Nazwa_klasy
+WHERE d.EndDate IS NULL
+  AND s.Nazwa_klasy IS NULL;
 
 UPDATE d
 SET 
     d.EndDate = s.EndDate
 FROM DimKlasa d
-JOIN SourceData s 
+JOIN vETLSourceKlasa s 
     ON d.Nazwa = s.Nazwa_klasy
-WHERE d.Wielkosc_klasy <> s.Wielkosc_klasy;
-AND d.EndDate IS NULL;
-GO
+WHERE d.EndDate IS NULL
+AND d.StartDate < s.StartDate;
 
-
-INSERT INTO DimKlasa (Nazwa, Wielkosc_klasy, StartDate, EndDate, IsCurrent)
+INSERT INTO DimKlasa (Nazwa, Wielkosc_klasy, StartDate, EndDate)
 SELECT
     s.Nazwa_klasy,
     s.Wielkosc_klasy,
     s.StartDate,
     NULL
-FROM SourceData s
+FROM vETLSourceKlasa s
 LEFT JOIN DimKlasa d
-    ON d.Nazwa = s.Nazwa_klasy AND d.EndDate IS NULL
-WHERE d.Nazwa IS NULL
-   OR d.Wielkosc_klasy <> s.Wielkosc_klasy;
+    ON d.Nazwa = s.Nazwa_klasy AND d.StartDate = s.StartDate
+WHERE d.Nazwa IS NULL;
 GO

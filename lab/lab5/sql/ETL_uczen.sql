@@ -1,46 +1,42 @@
 USE Szkola;
 GO
 
-
-IF OBJECT_ID('vETLDimUczenData','V') IS NOT NULL DROP VIEW vETLDimUczenData;
+IF OBJECT_ID('vETLSourceUczen','V') IS NOT NULL DROP VIEW vETLSourceUczen;
 GO
 
-CREATE VIEW vETLDimUczenData AS
-SELECT
-    Pesel,
-    ImieNazwisko = CAST(Imie + ' ' + Nazwisko AS VARCHAR(50)),
-    Wiek = CASE 
-            WHEN dbo.fn_peel_to_date(Pesel) IS NOT NULL THEN 
-                DATEDIFF(YEAR, dbo.fn_peel_to_date(Pesel), GETDATE())
-           ELSE NULL END
-FROM stg_uczen;
+CREATE VIEW vETLSourceUczen AS
+SELECT DISTINCT 
+    u.Pesel,
+    u.Imie + ' ' + u.Nazwisko AS ImieNazwisko,
+    k.Rok_szkolny AS StartDate,
+    DATEDIFF(YEAR, dbo.fn_peel_to_date(u.Pesel), k.Rok_szkolny) AS Wiek,
+    DATEFROMPARTS(YEAR(k.Rok_szkolny), 6, 30) AS EndDate
+FROM stg_uczen u
+JOIN stg_uczen_w_klasie uw ON u.Pesel = uw.Pesel
+JOIN stg_klasa k ON uw.Nazwa_klasy = k.Nazwa_klasy;
 GO
-
-WITH SourceData AS (
-    SELECT
-        u.Pesel,
-        u.Imie + ' ' + u.Nazwisko AS ImieNazwisko,
-        DATEDIFF(YEAR, dbo.fn_peel_to_date(u.Pesel), GETDATE()) AS Wiek,
-        k.Rok_szkolny AS StartDate,
-        DATEFROMPARTS(YEAR(k.Rok_szkolny), 6, 30) AS EndDate
-    FROM stg_uczen u
-    JOIN stg_uczen_w_klasie uw ON u.Pesel = uw.Pesel
-    JOIN stg_klasa k ON uw.Nazwa_klasy = k.Nazwa_klasy
-)
 
 UPDATE d
-SET 
-    d.IsCurrent = 0,
-    d.EndDate = s.EndDate
+SET d.IsCurrent = 0,
+    d.EndDate   = s.EndDate
 FROM DimUczen d
-JOIN vETLDimUczenData s 
+JOIN vETLSourceUczen s
     ON d.Pesel = s.Pesel
 WHERE d.IsCurrent = 1
   AND (
-        d.ImieNazwisko   <> s.ImieNazwisko OR
-        d.Wiek           <> s.Wiek
+        d.ImieNazwisko <> s.ImieNazwisko OR
+        d.Wiek <> s.Wiek OR
+        d.StartDate <> s.StartDate
       );
-GO
+
+UPDATE d
+SET d.IsCurrent = 0,
+    d.EndDate = DATEFROMPARTS(YEAR(d.StartDate)+1, 6, 30)
+FROM DimUczen d
+LEFT JOIN vETLSourceUczen s
+    ON d.Pesel = s.Pesel
+WHERE d.IsCurrent = 1
+  AND s.Pesel IS NULL;
 
 INSERT INTO DimUczen (Pesel, ImieNazwisko, Wiek, StartDate, EndDate, IsCurrent)
 SELECT
@@ -50,7 +46,12 @@ SELECT
     s.StartDate,
     NULL,
     1
-FROM vETLDimUczenData s
-LEFT JOIN DimUczen d ON d.Pesel = s.Pesel
+FROM vETLSourceUczen s
+LEFT JOIN DimUczen d 
+    ON d.Pesel = s.Pesel 
+   AND d.IsCurrent = 1
+   AND d.StartDate = s.StartDate
+   AND d.ImieNazwisko = s.ImieNazwisko
+   AND d.Wiek = s.Wiek
 WHERE d.Pesel IS NULL;
 GO

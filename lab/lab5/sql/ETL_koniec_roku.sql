@@ -31,12 +31,12 @@ JOIN DimUczen du
     ON uw.Pesel = du.Pesel 
     AND du.IsCurrent = 1
 
-JOIN DimKlasa dk 
-    ON uw.Nazwa_klasy = dk.Nazwa 
-    AND dk.EndDate IS NULL
-
 JOIN stg_klasa k
     ON uw.Nazwa_klasy = k.Nazwa_klasy
+
+JOIN DimKlasa dk 
+    ON uw.Nazwa_klasy = dk.Nazwa 
+    AND k.Rok_szkolny BETWEEN dk.StartDate AND ISNULL(dk.EndDate, '9999-12-31')
 
 JOIN DimDate dd
     ON dd.DataDate = CAST(k.Rok_szkolny as date)
@@ -62,14 +62,15 @@ LEFT JOIN DimJunk dj
         END
     AND dj.Czy_zdany_przedmiot =
         CASE 
-            WHEN kr.Ocena > 1 AND kr.Frekwencja >= 50 THEN 1
-            ELSE 0
+            WHEN kr.Ocena = 1 or kr.Frekwencja < 50 THEN 0
+            ELSE 1
         END
     AND (
         (w.Wynik IS NULL AND dj.Czy_zdana_matura IS NULL)
         OR
-        (w.Wynik IS NOT NULL AND dj.Czy_zdana_matura =
-            CASE WHEN w.Wynik > 30 THEN 1 ELSE 0 END)
+        (w.Wynik <= 30 AND dj. Czy_zdana_matura = 0)
+        OR
+        (w.Wynik > 30 AND dj.Czy_zdana_matura = 1)
     )
 
 LEFT JOIN FactKoniecRoku f
