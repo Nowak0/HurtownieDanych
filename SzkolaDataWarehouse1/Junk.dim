@@ -1,0 +1,179 @@
+﻿<Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="d7bd91f1-1fd5-422d-8073-8d0aa893cd7c" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Junk</ID>
+  <Name>Junk</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+      <Value>
+        <dds xmlns="">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="2" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-699" scrolltop="-2487" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="5461" y="7641" backcolor="2039583" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="0" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+            <font>
+              <ddsxmlobjectstreamwrapper binary="01ee00009001b0300100065461686f6d61" />
+            </font>
+            <mouseicon>
+              <ddsxmlobjectstreamwrapper binary="6c74000000000000" />
+            </mouseicon>
+          </diagram>
+          <layoutmanager>
+            <ddsxmlobj />
+          </layoutmanager>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="Junk" left="20" top="0" logicalid="1" controlid="1" masterid="0" hint1="0" hint2="0" width="4022" height="2667" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b60f00006b0a0000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_Junk" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+        </dds>
+      </Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>-699</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>-2487</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>20</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>100</Value>
+    </Annotation>
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Source xsi:type="DataSourceViewBinding" dwd:design-time-name="9c260fa5-3379-4bd7-83de-70e23ba5e6ae">
+    <DataSourceViewID>Szkola HD</DataSourceViewID>
+  </Source>
+  <ErrorConfiguration dwd:design-time-name="919e2e83-c921-4d69-93c4-2b2fc0eac407">
+    <KeyNotFound>ReportAndStop</KeyNotFound>
+    <KeyDuplicate>ReportAndStop</KeyDuplicate>
+    <NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+  </ErrorConfiguration>
+  <CurrentStorageMode>Molap</CurrentStorageMode>
+  <Attributes>
+    <Attribute dwd:design-time-name="f5e0a454-7983-4c79-b476-0f16bb256a6a">
+      <ID>ID Junk</ID>
+      <Name>ID Junk</Name>
+      <Usage>Key</Usage>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="9b2c2eda-2209-46e5-8d3d-f78cbf58278e">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="3a6eeca8-6579-48ff-b224-80b74e666b29">
+            <TableID>dbo_Junk</TableID>
+            <ColumnID>ID_Junk</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="e4f4fe59-b6b0-4167-ab41-b101602ba3e6">
+          <AttributeID>Ocena</AttributeID>
+          <Name>Ocena</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="c2ba91de-de0b-41fc-ac5a-785389c2eb7d">
+          <AttributeID>Frekwencja</AttributeID>
+          <Name>Frekwencja</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="1c5b6784-a989-4b5b-bdbd-da6fb1e2c705">
+          <AttributeID>Czy Zdany Przedmiot</AttributeID>
+          <Name>Czy Zdany Przedmiot</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="a1ce2072-d3b4-4093-ba54-5b120342af97">
+          <AttributeID>Czy Zdana Matura</AttributeID>
+          <Name>Czy Zdana Matura</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <OrderBy>Key</OrderBy>
+      <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+      <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
+    </Attribute>
+    <Attribute dwd:design-time-name="6dd726d9-d74c-4bf8-bbe4-b2d3eaa7b23e">
+      <ID>Ocena</ID>
+      <Name>Ocena</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="66a92a30-3f61-472e-8240-328f23b194bc">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="0ef2d541-8cf1-47f0-a725-32fe48312755">
+            <TableID>dbo_Junk</TableID>
+            <ColumnID>Ocena</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+      <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
+    </Attribute>
+    <Attribute dwd:design-time-name="901c2eac-2433-4fea-9ca8-d084d51f2c79">
+      <ID>Frekwencja</ID>
+      <Name>Frekwencja</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="b84b18dc-4908-4400-8eac-707065f843ef">
+          <DataType>WChar</DataType>
+          <DataSize>6</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="bc8dd70b-cc65-4b4c-bfcc-b52909929ca6">
+            <TableID>dbo_Junk</TableID>
+            <ColumnID>Frekwencja</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+      <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
+    </Attribute>
+    <Attribute dwd:design-time-name="aee572f6-bb56-48ae-b6cb-6cc5b888cb82">
+      <ID>Czy Zdany Przedmiot</ID>
+      <Name>Czy Zdany Przedmiot</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="5d462b21-cadb-4813-81f9-fc6741b2d94c">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="c74b97fa-c1ea-4e54-9b43-767fab2fe796">
+            <TableID>dbo_Junk</TableID>
+            <ColumnID>Czy_zdany_przedmiot</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+      <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
+    </Attribute>
+    <Attribute dwd:design-time-name="f8fb33da-d283-4d21-8d13-188373416f4e">
+      <ID>Czy Zdana Matura</ID>
+      <Name>Czy Zdana Matura</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="0dd57467-467e-4019-b086-3a3d8eb42537">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="9122fd84-6bf9-44dd-9810-ee1dfda74b2e">
+            <TableID>dbo_Junk</TableID>
+            <ColumnID>Czy_zdana_matura</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+      <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
+    </Attribute>
+  </Attributes>
+  <ddl300:ProcessingState>Unprocessed</ddl300:ProcessingState>
+</Dimension>
