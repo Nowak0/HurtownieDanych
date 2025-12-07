@@ -15,7 +15,7 @@ SELECT
         END AS Wielkosc_klasy,
 
         k.Rok_szkolny AS StartDate,
-        DATEFROMPARTS(YEAR(k.Rok_szkolny), 6, 30) AS EndDate
+        DATEFROMPARTS(YEAR(k.Rok_szkolny)+1, 6, 30) AS EndDate
     FROM stg_uczen_w_klasie uw
     JOIN stg_uczen u ON uw.Pesel = u.Pesel
     JOIN stg_klasa k ON uw.Nazwa_klasy = k.Nazwa_klasy
