@@ -5,14 +5,14 @@ SET NOCOUNT ON;
 
 IF OBJECT_ID('stg_uczen','U') IS NOT NULL DROP TABLE stg_uczen;
 CREATE TABLE stg_uczen (
-    Pesel char(11),
+    Pesel varchar(11),
     Imie varchar(20),
     Nazwisko varchar(30)
 );
 
 IF OBJECT_ID('stg_klasa','U') IS NOT NULL DROP TABLE stg_klasa;
 CREATE TABLE stg_klasa (
-    Nazwa_klasy char(2),
+    Nazwa_klasy varchar(10),
     Rok_szkolny date not null
 );
 
@@ -25,8 +25,8 @@ CREATE TABLE stg_przedmiot (
 IF OBJECT_ID('stg_uczen_w_klasie','U') IS NOT NULL DROP TABLE stg_uczen_w_klasie;
 CREATE TABLE stg_uczen_w_klasie (
     ID_Ucznia_w_klasie int not null,
-    Pesel char(11),
-    Nazwa_klasy char(2)
+    Pesel varchar(11),
+    Nazwa_klasy varchar(10)
 );
 
 IF OBJECT_ID('stg_koniec_roku','U') IS NOT NULL DROP TABLE stg_koniec_roku;
@@ -39,7 +39,7 @@ CREATE TABLE stg_koniec_roku (
 
 IF OBJECT_ID('stg_wyniki','U') IS NOT NULL DROP TABLE stg_wyniki;
 CREATE TABLE stg_wyniki (
-    Pesel char(11),
+    Pesel varchar(11),
     Przedmiot varchar(30),
     Wynik int NOT NULL,
     Data_matury date NOT NULL

@@ -2,7 +2,7 @@ USE Szkola;
 GO
 
 DECLARE @startDate DATE = '2024-09-01';
-DECLARE @endDate DATE   = '2026-06-30';
+DECLARE @endDate DATE   = '2025-06-30';
 
 ;WITH Dates AS (
     SELECT @startDate AS DataDate
@@ -23,5 +23,5 @@ WHERE NOT EXISTS (
     FROM DimDate dd
     WHERE dd.DataDate = d.DataDate
 )
-OPTION (MAXRECURSION 669);
+OPTION (MAXRECURSION 500);
 GO

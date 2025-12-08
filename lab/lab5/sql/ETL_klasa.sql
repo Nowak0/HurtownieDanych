@@ -15,10 +15,12 @@ SELECT
         END AS Wielkosc_klasy,
 
         k.Rok_szkolny AS StartDate,
-        DATEFROMPARTS(YEAR(k.Rok_szkolny)+1, 6, 30) AS EndDate
+        DATEFROMPARTS(YEAR(k.Rok_szkolny), 6, 30) AS EndDate
     FROM stg_uczen_w_klasie uw
     JOIN stg_uczen u ON uw.Pesel = u.Pesel
-    JOIN stg_klasa k ON uw.Nazwa_klasy = k.Nazwa_klasy
+	JOIN stg_klasa k
+    ON REPLACE(REPLACE(uw.Nazwa_klasy, CHAR(13), ''), CHAR(10), '') 
+       = REPLACE(REPLACE(k.Nazwa_klasy, CHAR(13), ''), CHAR(10), '')
     GROUP BY 
         k.Nazwa_klasy,
         k.Rok_szkolny;
@@ -41,14 +43,21 @@ JOIN vETLSourceKlasa s
 WHERE d.EndDate IS NULL
 AND d.StartDate < s.StartDate;
 
+
+
 INSERT INTO DimKlasa (Nazwa, Wielkosc_klasy, StartDate, EndDate)
 SELECT
     s.Nazwa_klasy,
-    s.Wielkosc_klasy,
+    s. Wielkosc_klasy,
     s.StartDate,
     NULL
 FROM vETLSourceKlasa s
-LEFT JOIN DimKlasa d
-    ON d.Nazwa = s.Nazwa_klasy AND d.StartDate = s.StartDate
-WHERE d.Nazwa IS NULL;
+WHERE NOT EXISTS (
+    SELECT 1 
+    FROM DimKlasa d
+    WHERE d.Nazwa = s.Nazwa_klasy 
+      AND d.StartDate = s. StartDate
+      AND d.Wielkosc_klasy = s.Wielkosc_klasy
+);
+
 GO
