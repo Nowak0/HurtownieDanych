@@ -3,42 +3,43 @@ import pandas as pd
 import random
 
 NUMBER_OF_SUBJECTS = 3
-NUMBER_OF_STUDENTS = 30
+NUMBER_OF_STUDENTS = 100000
 START_DATE_SCHOOL = "2024-09-01"
 START_DATE_EXAM = "2025-05-01"
 NUMBER_OF_YEARS = 3
+GRADES = [1,2,3,4,5,6]
+GRADE_PROBABILITY = [0.1, 0.1, 0.3, 0.3, 0.15, 0.05]
+FREQ = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+FREQ_PROBABILITY = [0.01, 0.02, 0.04, 0.03, 0.05, 0.05, 0.3, 0.3, 0.15, 0.05]
 
 
 def random_grade():
-    grades = [1,2,3,4,5,6]
-    probability = [0.1, 0.1, 0.3, 0.3, 0.15, 0.05]
     x = random.random()
     sum = 0
 
-    for p in range(len(probability)):
-        sum += probability[p]
+    for p in range(len(GRADE_PROBABILITY)):
+        sum += GRADE_PROBABILITY[p]
         if x <= sum:
             x = p
             break
 
-    return grades[x]
+    return GRADES[x]
 
 
 def random_frequency():
-    freq = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-    probability = [0.01, 0.02, 0.04, 0.03, 0.05, 0.05, 0.3, 0.3, 0.15, 0.05]
     x = random.random()
     sum = 0
 
-    for p in range(len(probability)):
-        sum += probability[p]
+    for p in range(len(FREQ_PROBABILITY)):
+        sum += FREQ_PROBABILITY[p]
         if x <= sum:
             x = p
             break
-    if freq[x] == 1:
+
+    if FREQ[x] == 1:
         return 100
     else:
-        value = random.uniform(freq[x], freq[x]+0.1) * 100
+        value = random.uniform(FREQ[x], FREQ[x] + 0.1) * 100
         return int(value)
 
 
@@ -62,23 +63,16 @@ def check_pid(pesel):
     return True
 
 
-def get_index_of_student_in_class(student_in_class, pid):
-    index = next((i for i, s in enumerate(student_in_class) if s["Pesel"] == str(pid)), None)
-    return index
-
-
-def assign_class_to_student(pid, students_in_class, class_names):
-    index = get_index_of_student_in_class(students_in_class, pid)
-    if index is not None:
-        prev_class = students_in_class[index]["Nazwa_klasy"]
+def assign_class_to_student(pid, old_student_map, class_names, empty_old_student_in_class, class_year_1):
+    if pid in old_student_map:
+        prev_class = old_student_map[pid]
         this_class = str(int(prev_class[0]) + 1) + prev_class[1]
         if this_class not in class_names:
             return None
-    elif not students_in_class:
+    elif empty_old_student_in_class:
         this_class = random.choice(class_names)
     else:
-        only1_class_names = [c for c in class_names if c[0] == "1"]
-        this_class = random.choice(only1_class_names)
+        this_class = random.choice(class_year_1)
 
     return this_class
 
@@ -145,18 +139,25 @@ def generate_student_in_class(students, classes, student_in_class_id, old_studen
     new_student_in_class = []
     pids_to_remove = []
     class_names = [c["Nazwa_klasy"] for c in classes]
+    class_year_1 = [c for c in class_names if c[0] == "1"]
+    empty_old_student_in_class = True if old_student_in_class is None else False
+
+    old_student_map = {}
+    if not empty_old_student_in_class:
+        old_student_map = {s["Pesel"]: s["Nazwa_klasy"] for s in old_student_in_class}
 
     for i in range(len(students)):
         pid = students[i]['Pesel']
-        this_class = assign_class_to_student(pid, old_student_in_class, class_names)
+
+        this_class = assign_class_to_student(pid, old_student_map, class_names, empty_old_student_in_class, class_year_1)
         if this_class is None:
             pids_to_remove.append(pid)
             continue
-        student_in_class_id += 1
 
+        student_in_class_id += 1
         new_student_in_class.append({
             "ID_Ucznia_w_klasie": student_in_class_id,
-            "Pesel": students[i]['Pesel'],
+            "Pesel": pid,
             "Nazwa_klasy": this_class
         })
 
@@ -200,17 +201,28 @@ student_in_class_id = 0
 student_in_class = []
 
 for i in range(NUMBER_OF_YEARS):
+    print(f"\nProcessing year {i+1}/{NUMBER_OF_YEARS}...")
+
+    print("\tGenerating students")
     if i == 0:
         students = generate_students(NUMBER_OF_STUDENTS, faker, students)
     else:
         students = generate_students(NUMBER_OF_STUDENTS // 4, faker, students)
 
+    print("\tGenerating classes")
     classes = generate_classes(adjust_year(START_DATE_SCHOOL, i))
+
+    print("\tGenerating subjects")
     subjects = generate_subjects()
+
+    print("\tGenerating students in classes")
     student_in_class, students, student_in_class_id = generate_student_in_class(students, classes, student_in_class_id, student_in_class)
+
+    print("\tGenerating end year results")
     end_year = generate_end_year(student_in_class)
     results = generate_results(student_in_class, subjects, adjust_year(START_DATE_EXAM, i))
 
+    print("\tWriting results to file")
     df1 = pd.DataFrame(students, columns=["Pesel", "Imie", "Nazwisko"])
     df2 = pd.DataFrame(classes, columns=["Nazwa_klasy", "Rok_szkolny"])
     df3 = pd.DataFrame(subjects, columns=["ID_Przedmiotu", "Nazwa"])
@@ -224,4 +236,6 @@ for i in range(NUMBER_OF_YEARS):
     df4.to_csv(f"dane/t{i+1}/uczen_w_klasie.csv", index=False)
     df5.to_csv(f"dane/t{i+1}/koniec_roku.csv", index=False)
     df6.to_csv(f"dane/t{i+1}/wyniki.csv", index=False)
+
+print("All done!")
 
