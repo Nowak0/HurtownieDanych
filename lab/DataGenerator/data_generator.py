@@ -44,11 +44,7 @@ def random_frequency():
 
 
 def filter_students(student_in_class, class_number):
-    filtered_students = []
-    for i in range(len(student_in_class)):
-        if int(student_in_class[i]["Nazwa_klasy"][0]) == class_number:
-            filtered_students.append(student_in_class[i])
-
+    filtered_students = [s for s in student_in_class if int(s["Nazwa_klasy"][0]) == int(class_number)]
     return filtered_students
 
 
@@ -141,8 +137,8 @@ def generate_student_in_class(students, classes, student_in_class_id, old_studen
     class_names = [c["Nazwa_klasy"] for c in classes]
     class_year_1 = [c for c in class_names if c[0] == "1"]
     empty_old_student_in_class = True if old_student_in_class is None else False
-
     old_student_map = {}
+
     if not empty_old_student_in_class:
         old_student_map = {s["Pesel"]: s["Nazwa_klasy"] for s in old_student_in_class}
 
