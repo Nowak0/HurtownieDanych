@@ -21,5 +21,6 @@ BEGIN
     FROM @grades g
     CROSS JOIN @attendances a
     CROSS JOIN @exams e;
+
 END
 GO

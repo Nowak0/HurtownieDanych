@@ -1,6 +1,7 @@
 USE Szkola;
 GO
 
+
 INSERT INTO FactKoniecRoku (
     ID_Ucznia,
     ID_Klasy,
@@ -32,11 +33,13 @@ JOIN DimUczen du
     AND du.IsCurrent = 1
 
 JOIN stg_klasa k
-    ON uw.Nazwa_klasy = k.Nazwa_klasy
+    ON REPLACE(REPLACE(uw.Nazwa_klasy, CHAR(13), ''), CHAR(10), '') 
+       = REPLACE(REPLACE(k.Nazwa_klasy, CHAR(13), ''), CHAR(10), '')
 
 JOIN DimKlasa dk 
-    ON uw.Nazwa_klasy = dk.Nazwa 
-    AND k.Rok_szkolny BETWEEN dk.StartDate AND ISNULL(dk.EndDate, '9999-12-31')
+    ON REPLACE(REPLACE(uw.Nazwa_klasy, CHAR(13), ''), CHAR(10), '') 
+       = REPLACE(REPLACE(dk.Nazwa, CHAR(13), ''), CHAR(10), '')
+    AND dk.EndDate IS NULL
 
 JOIN DimDate dd
     ON dd.DataDate = CAST(k.Rok_szkolny as date)
@@ -45,11 +48,12 @@ JOIN DimPrzedmiot dp
     ON kr.ID_Przedmiotu = dp.SourceSubjectID
 
 LEFT JOIN stg_wyniki w 
-    ON uw.Pesel = w.Pesel 
-    AND dp.Nazwa = w.Przedmiot
+    ON LTRIM(RTRIM(uw. Pesel)) = LTRIM(RTRIM(w. Pesel))
+    AND REPLACE(REPLACE(LTRIM(RTRIM(dp.Nazwa)), CHAR(13), ''), CHAR(10), '')
+       = REPLACE(REPLACE(LTRIM(RTRIM(w.Przedmiot)), CHAR(13), ''), CHAR(10), '')
 
 LEFT JOIN DimDate ddm 
-    ON ddm.DataDate = w.Data_matury
+    ON ddm.DataDate = CAST(w.Data_matury as date)
 
 LEFT JOIN DimJunk dj 
     ON dj.Ocena = kr.Ocena

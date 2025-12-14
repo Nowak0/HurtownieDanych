@@ -13,7 +13,9 @@ SELECT DISTINCT
     DATEFROMPARTS(YEAR(k.Rok_szkolny), 6, 30) AS EndDate
 FROM stg_uczen u
 JOIN stg_uczen_w_klasie uw ON u.Pesel = uw.Pesel
-JOIN stg_klasa k ON uw.Nazwa_klasy = k.Nazwa_klasy;
+JOIN stg_klasa k
+    ON REPLACE(REPLACE(uw.Nazwa_klasy, CHAR(13), ''), CHAR(10), '') 
+       = REPLACE(REPLACE(k.Nazwa_klasy, CHAR(13), ''), CHAR(10), '')
 GO
 
 UPDATE d
