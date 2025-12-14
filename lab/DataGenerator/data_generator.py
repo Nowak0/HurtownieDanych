@@ -132,11 +132,13 @@ def generate_end_year(student_in_class):
 
 
 def generate_student_in_class(students, classes, student_in_class_id, old_student_in_class = None):
+    if old_student_in_class is None:
+        old_student_in_class = []
     new_student_in_class = []
     pids_to_remove = []
     class_names = [c["Nazwa_klasy"] for c in classes]
     class_year_1 = [c for c in class_names if c[0] == "1"]
-    empty_old_student_in_class = True if old_student_in_class is None else False
+    empty_old_student_in_class = True if len(old_student_in_class) == 0 else False
     old_student_map = {}
 
     if not empty_old_student_in_class:
@@ -217,7 +219,7 @@ for i in range(NUMBER_OF_YEARS):
     print("\tGenerating end year results")
     end_year = generate_end_year(student_in_class)
     results = generate_results(student_in_class, subjects, adjust_year(START_DATE_EXAM, i))
-
+    
     print("\tWriting results to file")
     df1 = pd.DataFrame(students, columns=["Pesel", "Imie", "Nazwisko"])
     df2 = pd.DataFrame(classes, columns=["Nazwa_klasy", "Rok_szkolny"])
